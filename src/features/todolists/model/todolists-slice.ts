@@ -1,4 +1,3 @@
-import { createAsyncThunk } from "@reduxjs/toolkit"
 import { Todolist } from "@/features/todolists/api/todolistsApi.types.ts"
 import { todolistsApi } from "@/features/todolists/api/todolistsApi.ts"
 import { createAppSlice } from "@/common/utils"
@@ -25,12 +24,12 @@ export const todolistsSlice = createAppSlice({
         async (_, thunkApi) => {
           const { dispatch, rejectWithValue } = thunkApi
           try {
-            dispatch(setAppStatusAC({ status: 'loading' }))
+            dispatch(setAppStatusAC({ status: "loading" }))
             const res = await todolistsApi.getTodolists()
-            dispatch(setAppStatusAC({ status: 'succeeded' }))
+            dispatch(setAppStatusAC({ status: "succeeded" }))
             return { todolists: res.data }
           } catch (error) {
-            dispatch(setAppStatusAC({ status: 'failed' }))
+            dispatch(setAppStatusAC({ status: "failed" }))
             return rejectWithValue(null)
           }
         },
@@ -40,27 +39,80 @@ export const todolistsSlice = createAppSlice({
           },
         },
       ),
+
+      createTodolistTC: create.asyncThunk(
+        async (args: { title: string }, thunkApi) => {
+          const { dispatch, rejectWithValue } = thunkApi
+          try {
+            dispatch(setAppStatusAC({ status: "loading" }))
+            const res = await todolistsApi.createTodolist(args.title)
+            dispatch(setAppStatusAC({ status: "succeeded" }))
+            return { todolist: res.data.data.item }
+          } catch (error) {
+            dispatch(setAppStatusAC({ status: "failed" }))
+            return rejectWithValue(null)
+          }
+        },
+        {
+          fulfilled: (state, action) => {
+            state.push({ ...action.payload.todolist, filter: "all" })
+          },
+        },
+      ),
+
+      deleteTodolistTC: create.asyncThunk(
+        async (args: { todolistId: string }, thunkApi) => {
+          const { dispatch, rejectWithValue } = thunkApi
+          try {
+            dispatch(setAppStatusAC({ status: "loading" }))
+            await todolistsApi.deleteTodolist(args.todolistId)
+            dispatch(setAppStatusAC({ status: "succeeded" }))
+            return { todolistId: args.todolistId }
+          } catch (error) {
+            dispatch(setAppStatusAC({ status: "failed" }))
+            return rejectWithValue(null)
+          }
+        },
+        {
+          fulfilled: (state, action) => {
+            const index = state.findIndex((todolist) => todolist.id === action.payload.todolistId)
+            if (index !== -1) {
+              state.splice(index, 1)
+            }
+          },
+        },
+      ),
+
+      changeTodolistTitleTC: create.asyncThunk(
+        async (args: { id: string; title: string }, thunkApi) => {
+          const { dispatch, rejectWithValue } = thunkApi
+          try {
+            dispatch(setAppStatusAC({ status: "loading" }))
+            await todolistsApi.changeTodolistTitle(args)
+            dispatch(setAppStatusAC({ status: "succeeded" }))
+            return args
+          } catch (error) {
+            dispatch(setAppStatusAC({ status: "failed" }))
+            return rejectWithValue(null)
+          }
+        },
+        {
+          fulfilled: (state, action) => {
+            const index = state.findIndex((todolist) => todolist.id === action.payload.id)
+            if (index !== -1) {
+              state[index].title = action.payload.title
+            }
+          },
+        },
+      ),
     }
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(changeTodolistTitleTC.fulfilled, (state, action) => {
-        const index = state.findIndex((todolist) => todolist.id === action.payload.id)
-        if (index !== -1) {
-          state[index].title = action.payload.title
-        }
-      })
-      .addCase(createTodolistTS.fulfilled, (state, action) => {
-        state.push({ ...action.payload.todolist, filter: "all" })
-      })
-      .addCase(deleteTodolistTS.fulfilled, (state, action) => {
-        const index = state.findIndex((todolist) => todolist.id === action.payload.id)
-        if (index !== -1) {
-          state.splice(index, 1)
-        }
-      })
-  },
 })
+
+export const todolistsReducer = todolistsSlice.reducer
+export const { changeTodolistFilterAC, fetchTodolistsTS, createTodolistTC, deleteTodolistTC, changeTodolistTitleTC } =
+  todolistsSlice.actions
+export const { selectTodolists } = todolistsSlice.selectors
 
 //Thunk
 
@@ -74,44 +126,40 @@ export const todolistsSlice = createAppSlice({
 //   }
 // })
 
-export const changeTodolistTitleTC = createAsyncThunk(
-  `${todolistsSlice.name}/changeTodolistTitleTC`,
-  async (payload: { id: string; title: string }, thunkAPI) => {
-    try {
-      await todolistsApi.changeTodolistTitle(payload)
-      return payload
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error)
-    }
-  },
-)
-
-export const createTodolistTS = createAsyncThunk(
-  `${todolistsSlice.name}/createTodolistTS`,
-  async (title: string, thunkAPI) => {
-    const { rejectWithValue } = thunkAPI
-    try {
-      const res = await todolistsApi.createTodolist(title)
-      return { todolist: res.data.data.item }
-    } catch (e) {
-      return rejectWithValue(e)
-    }
-  },
-)
-
-export const deleteTodolistTS = createAsyncThunk(
-  `${todolistsSlice.name}/deleteTodolistTS`,
-  async (id: string, thunkAPI) => {
-    const { rejectWithValue } = thunkAPI
-    try {
-      await todolistsApi.deleteTodolist(id)
-      return { id }
-    } catch (e) {
-      return rejectWithValue(e)
-    }
-  },
-)
-
-export const todolistsReducer = todolistsSlice.reducer
-export const { changeTodolistFilterAC, fetchTodolistsTS } = todolistsSlice.actions
-export const { selectTodolists } = todolistsSlice.selectors
+// export const changeTodolistTitleTC = createAsyncThunk(
+//   `${todolistsSlice.name}/changeTodolistTitleTC`,
+//   async (payload: { id: string; title: string }, thunkAPI) => {
+//     try {
+//       await todolistsApi.changeTodolistTitle(payload)
+//       return payload
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error)
+//     }
+//   },
+// )
+//
+// export const createTodolistTS = createAsyncThunk(
+//   `${todolistsSlice.name}/createTodolistTS`,
+//   async (title: string, thunkAPI) => {
+//     const { rejectWithValue } = thunkAPI
+//     try {
+//       const res = await todolistsApi.createTodolist(title)
+//       return { todolist: res.data.data.item }
+//     } catch (e) {
+//       return rejectWithValue(e)
+//     }
+//   },
+// )
+//
+// export const deleteTodolistTS = createAsyncThunk(
+//   `${todolistsSlice.name}/deleteTodolistTS`,
+//   async (id: string, thunkAPI) => {
+//     const { rejectWithValue } = thunkAPI
+//     try {
+//       await todolistsApi.deleteTodolist(id)
+//       return { id }
+//     } catch (e) {
+//       return rejectWithValue(e)
+//     }
+//   },
+// )
