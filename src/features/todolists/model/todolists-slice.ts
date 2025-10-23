@@ -78,6 +78,7 @@ export const todolistsSlice = createAppSlice({
             return { todolistId: args.todolistId }
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
+            dispatch(changeTodolistEntityStatusAC({id: args.todolistId, entityStatus: 'failed'}))
             return rejectWithValue(null)
           }
         },
