@@ -4,6 +4,9 @@ import { DomainTask, type UpdateTaskModel } from "@/features/todolists/api/tasks
 import { setAppStatusAC } from "@/app/app-slice.ts"
 import { RootState } from "@/app/store.ts"
 import { createTodolistTC, deleteTodolistTC } from "@/features/todolists/model/todolists-slice.ts"
+import { ResultCode } from "@/common/enums"
+import { handleServerError } from "@/common/utils/handleServerError.ts"
+import { handleAppError } from "@/common/utils/handleAppError.ts"
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -37,10 +40,15 @@ export const tasksSlice = createAppSlice({
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
             const res = await tasksApi.createTask(args)
-            dispatch(setAppStatusAC({ status: "succeeded" }))
-            return { task: res.data.data.item }
+            if (res.data.resultCode === ResultCode.Success) {
+              dispatch(setAppStatusAC({ status: "succeeded" }))
+              return { task: res.data.data.item }
+            } else {
+              handleAppError(dispatch, res.data)
+              return rejectWithValue(null)
+            }
           } catch (error) {
-            dispatch(setAppStatusAC({ status: "failed" }))
+            handleServerError(error, dispatch)
             return rejectWithValue(null)
           }
         },
