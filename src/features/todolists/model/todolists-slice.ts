@@ -81,9 +81,14 @@ export const todolistsSlice = createAppSlice({
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
             dispatch(changeTodolistEntityStatusAC({ id: args.todolistId, entityStatus: "loading" }))
-            await todolistsApi.deleteTodolist(args.todolistId)
-            dispatch(setAppStatusAC({ status: "succeeded" }))
-            return { todolistId: args.todolistId }
+            const res = await todolistsApi.deleteTodolist(args.todolistId)
+            if (res.data.resultCode === ResultCode.Success) {
+              dispatch(setAppStatusAC({ status: "succeeded" }))
+              return { todolistId: args.todolistId }
+            } else {
+              handleAppError(dispatch, res.data)
+              return rejectWithValue(null)
+            }
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
             dispatch(changeTodolistEntityStatusAC({ id: args.todolistId, entityStatus: "failed" }))
