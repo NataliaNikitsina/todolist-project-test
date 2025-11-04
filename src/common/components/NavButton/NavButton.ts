@@ -1,8 +1,12 @@
 import { styled } from "@mui/material/styles"
 import Button from "@mui/material/Button"
+import { ForwardRefExoticComponent, RefAttributes } from "react"
+import { NavLinkProps } from "react-router"
 
 type Props = {
-  background?: string
+  background?: string;
+  component?: ForwardRefExoticComponent<NavLinkProps & RefAttributes<HTMLAnchorElement>>
+  to?: string;
 }
 
 export const NavButton = styled(Button)<Props>(({ background, theme }) => ({
