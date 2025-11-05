@@ -1,8 +1,8 @@
 import { setAppErrorAC, setAppStatusAC } from "@/app/app-slice.ts"
 import { Dispatch } from "@reduxjs/toolkit"
-import { BaseResponse } from "@/common/types"
+import {CommonBaseResponse } from "@/common/types"
 
-export const handleAppError = <T> (dispatch:Dispatch, data:BaseResponse<T>) => {
+export const handleAppError = (dispatch:Dispatch, data:CommonBaseResponse) => {
   const error = data.messages.length ? data.messages[0] : 'Something went wrong.'
   dispatch(setAppErrorAC({ error}))
   dispatch(setAppStatusAC({ status: "failed" }))

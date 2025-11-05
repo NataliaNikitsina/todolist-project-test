@@ -64,12 +64,9 @@ export const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup>
             <TextField label="Email" margin="normal" error={!!errors.email} {...register("email")} />
-            {errors.email && (
-              <span role={"alert"} style={{ color: "red" }}>
-                {errors.email.message}
-              </span>
-            )}
+            {errors.email && (<span role={"alert"} style={{ color: "red" }}>{errors.email.message}</span>)}
             <TextField type="password" label="Password" margin="normal" {...register("password")} />
+            {errors.password && (<span role={"alert"} style={{ color: "red" }}>{errors.password.message}</span>)}
             <FormControlLabel
               label="Remember me"
               control={

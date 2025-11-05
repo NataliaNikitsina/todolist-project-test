@@ -7,6 +7,8 @@ import { createTodolistTC, deleteTodolistTC } from "@/features/todolists/model/t
 import { ResultCode } from "@/common/enums"
 import { handleServerError } from "@/common/utils/handleServerError.ts"
 import { handleAppError } from "@/common/utils/handleAppError.ts"
+import { getTasksResponseSchema } from "@/features/todolists/model/schema.ts"
+import { baseDefaultResponseSchema, baseTasksOperationResponseSchema } from "@/common/types/schema.ts"
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -20,6 +22,7 @@ export const tasksSlice = createAppSlice({
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
             const res = await tasksApi.getTasks(todolistId)
+            getTasksResponseSchema.parse(res.data)  //ZOD
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return { todolistId, tasks: res.data.items }
           } catch (error) {
@@ -41,6 +44,7 @@ export const tasksSlice = createAppSlice({
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
             const res = await tasksApi.createTask(args)
+            baseTasksOperationResponseSchema.parse(res.data)
             if (res.data.resultCode === ResultCode.Success) {
               dispatch(setAppStatusAC({ status: "succeeded" }))
               return { task: res.data.data.item }
@@ -66,6 +70,7 @@ export const tasksSlice = createAppSlice({
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
             const res = await tasksApi.deleteTask(args)
+            baseDefaultResponseSchema.parse(res.data)
             if (res.data.resultCode === ResultCode.Success) {
               dispatch(setAppStatusAC({ status: "succeeded" }))
               return args
@@ -114,6 +119,7 @@ export const tasksSlice = createAppSlice({
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
             const res = await tasksApi.updateTask({ todolistId: args.todolistId, taskId: args.taskId, model })
+            baseTasksOperationResponseSchema.parse(res.data)
             if (res.data.resultCode === ResultCode.Success) {
               dispatch(setAppStatusAC({ status: "succeeded" }))
               return { task: res.data.data.item }
