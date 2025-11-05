@@ -4,7 +4,7 @@ import { createAppSlice } from "@/common/utils"
 import { setAppStatusAC } from "@/app/app-slice.ts"
 import { RequestStatus } from "@/common/types"
 import { ResultCode } from "@/common/enums"
-import { handleServerError } from "@/common/utils/handleServerError.ts"
+import { handleNetworkError } from "@/common/utils/handleNetworkError.ts"
 import { handleAppError } from "@/common/utils/handleAppError.ts"
 import { todolistSchema } from "@/features/todolists/model/schema.ts"
 import { baseDefaultResponseSchema, baseTodolistOperationResponseSchema } from "@/common/types/schema.ts"
@@ -68,7 +68,7 @@ export const todolistsSlice = createAppSlice({
               return rejectWithValue(null)
             }
           } catch (error) {
-            handleServerError(error, dispatch)
+            handleNetworkError(error, dispatch)
             return rejectWithValue(null)
           }
         },

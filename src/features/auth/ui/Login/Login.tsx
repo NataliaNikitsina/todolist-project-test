@@ -1,5 +1,5 @@
 import { selectThemeMode } from "@/app/app-slice"
-import { useAppSelector } from "@/common/hooks"
+import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
 import Button from "@mui/material/Button"
 import Checkbox from "@mui/material/Checkbox"
@@ -12,11 +12,23 @@ import TextField from "@mui/material/TextField"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LoginInputs, loginSchema } from "@/features/auth/model/schema.ts"
+import { useNavigate } from "react-router"
+import { loginTC } from "@/features/auth/api/auth-slice.ts"
+import { Path } from "@/common/components/Routing/Routing.tsx"
 
 export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
+  //const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
   const theme = getTheme(themeMode)
+  const dispatch = useAppDispatch()
+  let navigate = useNavigate()
+
+  // useEffect(() => {
+  //   if(isLoggedIn) {
+  //     navigate(Path.Main)
+  //   }
+  // }, [isLoggedIn])
 
   const {
     register,
@@ -34,9 +46,22 @@ export const Login = () => {
   })
 
   const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-    console.log(data)
-    reset()
+    dispatch(loginTC(data))
+      .unwrap()
+      .then((res: any) => {
+      if (res.isLoggedIn) {
+        navigate(Path.Main)
+        reset()
+      }
+    })
+      .catch((err: any) => {
+        console.log(err)
+      })
   }
+
+  // if (isLoggedIn) {
+  //   return <Navigate to={Path.Main} />
+  // }
 
   return (
     <Grid container justifyContent={"center"}>
@@ -64,9 +89,17 @@ export const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup>
             <TextField label="Email" margin="normal" error={!!errors.email} {...register("email")} />
-            {errors.email && (<span role={"alert"} style={{ color: "red" }}>{errors.email.message}</span>)}
+            {errors.email && (
+              <span role={"alert"} style={{ color: "red" }}>
+                {errors.email.message}
+              </span>
+            )}
             <TextField type="password" label="Password" margin="normal" {...register("password")} />
-            {errors.password && (<span role={"alert"} style={{ color: "red" }}>{errors.password.message}</span>)}
+            {errors.password && (
+              <span role={"alert"} style={{ color: "red" }}>
+                {errors.password.message}
+              </span>
+            )}
             <FormControlLabel
               label="Remember me"
               control={

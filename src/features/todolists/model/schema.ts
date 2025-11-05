@@ -23,12 +23,12 @@ export const  getTasksResponseSchema = z.object({
 })
 
 export const updateTaskModelSchema = z.object ({
-  description: z.string(),
+  description: z.string().nullable(),
   title: z.string(),
   status: z.enum(TaskStatus),
   priority: z.enum(TaskPriority),
-  startDate: z.string(),
-  deadline: z.string(),
+  startDate: z.string().nullable(),
+  deadline: z.string().nullable(),
 })
 
 

@@ -3,7 +3,7 @@ import { Dispatch } from "@reduxjs/toolkit"
 import axios from "axios"
 import { z } from "zod"
 
-export const handleServerError = (error: unknown, dispatch: Dispatch) => {
+export const handleNetworkError = (error: unknown, dispatch: Dispatch) => {
   let errorMessage
 
   switch (true) {

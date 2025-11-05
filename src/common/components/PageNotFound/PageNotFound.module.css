@@ -10,3 +10,6 @@
     margin: 0;
     text-transform: uppercase;
 }
+ .wrapper {
+     margin: 0 auto;
+ }

@@ -5,7 +5,7 @@ import { setAppStatusAC } from "@/app/app-slice.ts"
 import { RootState } from "@/app/store.ts"
 import { createTodolistTC, deleteTodolistTC } from "@/features/todolists/model/todolists-slice.ts"
 import { ResultCode } from "@/common/enums"
-import { handleServerError } from "@/common/utils/handleServerError.ts"
+import { handleNetworkError } from "@/common/utils/handleNetworkError.ts"
 import { handleAppError } from "@/common/utils/handleAppError.ts"
 import { getTasksResponseSchema } from "@/features/todolists/model/schema.ts"
 import { baseDefaultResponseSchema, baseTasksOperationResponseSchema } from "@/common/types/schema.ts"
@@ -27,7 +27,7 @@ export const tasksSlice = createAppSlice({
             return { todolistId, tasks: res.data.items }
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
-            handleServerError(error, dispatch)
+            handleNetworkError(error, dispatch)
             return rejectWithValue(null)
           }
         },
@@ -53,7 +53,7 @@ export const tasksSlice = createAppSlice({
               return rejectWithValue(null)
             }
           } catch (error) {
-            handleServerError(error, dispatch)
+            handleNetworkError(error, dispatch)
             return rejectWithValue(null)
           }
         },
@@ -79,7 +79,7 @@ export const tasksSlice = createAppSlice({
               return rejectWithValue(null)
             }
           } catch (error) {
-            handleServerError(error, dispatch)
+            handleNetworkError(error, dispatch)
             return rejectWithValue(null)
           }
         },
