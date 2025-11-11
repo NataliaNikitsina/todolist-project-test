@@ -8,6 +8,7 @@ import { handleNetworkError } from "@/common/utils/handleNetworkError.ts"
 import { handleAppError } from "@/common/utils/handleAppError.ts"
 import { todolistSchema } from "@/features/todolists/model/schema.ts"
 import { baseDefaultResponseSchema, baseTodolistOperationResponseSchema } from "@/common/types/schema.ts"
+import { clearDataAC } from "@/common/actions"
 
 export type DomainTodolist = Todolist & { filter: FilterValues; entityStatus: RequestStatus }
 
@@ -135,6 +136,12 @@ export const todolistsSlice = createAppSlice({
       ),
     }
   },
+  extraReducers: builder => {
+    builder
+      .addCase(clearDataAC, ()=>{
+        return []
+      })
+  }
 })
 
 export const todolistsReducer = todolistsSlice.reducer

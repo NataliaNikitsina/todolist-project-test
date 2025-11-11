@@ -9,6 +9,7 @@ import { handleNetworkError } from "@/common/utils/handleNetworkError.ts"
 import { handleAppError } from "@/common/utils/handleAppError.ts"
 import { getTasksResponseSchema } from "@/features/todolists/model/schema.ts"
 import { baseDefaultResponseSchema, baseTasksOperationResponseSchema } from "@/common/types/schema.ts"
+import { clearDataAC } from "@/common/actions"
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -151,6 +152,9 @@ export const tasksSlice = createAppSlice({
       })
       .addCase(deleteTodolistTC.fulfilled, (state, action) => {
         delete state[action.payload.todolistId]
+      })
+      .addCase(clearDataAC, ()=>{
+        return {}
       })
   },
 })

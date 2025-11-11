@@ -6,6 +6,7 @@ import { handleNetworkError } from "@/common/utils/handleNetworkError.ts"
 import { ResultCode } from "@/common/enums"
 import { handleAppError } from "@/common/utils/handleAppError.ts"
 import { AUTH_TOKEN } from "@/common/constants/constants.ts"
+import { clearDataAC } from "@/common/actions"
 
 export const authSlice = createAppSlice({
   name: "auth",
@@ -48,6 +49,7 @@ export const authSlice = createAppSlice({
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "succeeded" }))
             localStorage.removeItem(AUTH_TOKEN)
+            dispatch(clearDataAC())
             return { isLoggedIn: false }
           } else {
             handleAppError(dispatch, res.data)
