@@ -1,4 +1,4 @@
-import { changeThemeModeAC, selectStatus, selectThemeMode } from "@/app/app-slice.ts"
+import { changeThemeModeAC, selectAppLogin, selectStatus, selectThemeMode } from "@/app/app-slice.ts"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { containerSx } from "@/common/styles"
 import { NavButton } from "@/common/components/NavButton/NavButton"
@@ -17,6 +17,7 @@ export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const status = useAppSelector(selectStatus)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
+  const appLogin = useAppSelector(selectAppLogin)
 
   const dispatch = useAppDispatch()
 
@@ -36,9 +37,14 @@ export const Header = () => {
             <MenuIcon />
           </IconButton>
           <div>
+            <NavButton component={NavLink} to={Path.Main}>
+              Main
+            </NavButton>
+            <NavButton component={NavLink} to={Path.Faq}>
+              Faq
+            </NavButton>
             {isLoggedIn && <NavButton onClick={handleLogout}>Logout</NavButton>}
-            <NavButton component={NavLink} to={Path.Main}>Main</NavButton>
-            <NavButton component={NavLink} to={Path.Faq}>Faq</NavButton>
+            {isLoggedIn && <NavButton>{appLogin}</NavButton>}
             <Switch color={"default"} onChange={changeMode} />
           </div>
         </Container>

@@ -8,7 +8,7 @@ import { ResultCode } from "@/common/enums"
 import { handleNetworkError } from "@/common/utils/handleNetworkError.ts"
 import { handleAppError } from "@/common/utils/handleAppError.ts"
 import { getTasksResponseSchema } from "@/features/todolists/model/schema.ts"
-import { baseDefaultResponseSchema, baseTasksOperationResponseSchema } from "@/common/types/schema.ts"
+import { baseDefaultResponseSchema, baseTaskResponseSchema } from "@/common/types/schema.ts"
 import { clearDataAC } from "@/common/actions"
 
 export const tasksSlice = createAppSlice({
@@ -45,7 +45,7 @@ export const tasksSlice = createAppSlice({
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
             const res = await tasksApi.createTask(args)
-            baseTasksOperationResponseSchema.parse(res.data)
+            baseTaskResponseSchema.parse(res.data)
             if (res.data.resultCode === ResultCode.Success) {
               dispatch(setAppStatusAC({ status: "succeeded" }))
               return { task: res.data.data.item }
@@ -120,7 +120,7 @@ export const tasksSlice = createAppSlice({
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
             const res = await tasksApi.updateTask({ todolistId: args.todolistId, taskId: args.taskId, model })
-            baseTasksOperationResponseSchema.parse(res.data)
+            baseTaskResponseSchema.parse(res.data)
             if (res.data.resultCode === ResultCode.Success) {
               dispatch(setAppStatusAC({ status: "succeeded" }))
               return { task: res.data.data.item }

@@ -1,7 +1,7 @@
 import { LoginInputs } from "@/features/auth/model/schema.ts"
 import { createAppSlice } from "@/common/utils"
 import { authApi } from "@/features/auth/api/authApi.ts"
-import { setAppStatusAC } from "@/app/app-slice.ts"
+import { setAppLoginAC, setAppStatusAC } from "@/app/app-slice.ts"
 import { handleNetworkError } from "@/common/utils/handleNetworkError.ts"
 import { ResultCode } from "@/common/enums"
 import { handleAppError } from "@/common/utils/handleAppError.ts"
@@ -13,7 +13,9 @@ export const authSlice = createAppSlice({
   initialState: {
     isLoggedIn: false,
   },
-  selectors: { selectIsLoggedIn: (state) => state.isLoggedIn },
+  selectors: {
+    selectIsLoggedIn: (state) => state.isLoggedIn,
+  },
   reducers: (create) => ({
     loginTC: create.asyncThunk(
       async (data: LoginInputs, { dispatch, rejectWithValue }) => {
@@ -22,6 +24,7 @@ export const authSlice = createAppSlice({
           const res = await authApi.login(data)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "succeeded" }))
+            dispatch(setAppLoginAC({ login: data.email}))
             localStorage.setItem(AUTH_TOKEN, res.data.data.token)
             return { isLoggedIn: true }
           } else {
@@ -49,6 +52,7 @@ export const authSlice = createAppSlice({
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "succeeded" }))
             localStorage.removeItem(AUTH_TOKEN)
+            dispatch(setAppLoginAC({ login: null }))
             dispatch(clearDataAC())
             return { isLoggedIn: false }
           } else {
@@ -75,7 +79,8 @@ export const authSlice = createAppSlice({
           const res = await authApi.me()
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "succeeded" }))
-            return { isLoggedIn: true }
+            dispatch(setAppLoginAC({ login: res.data.data.email }))
+            return { isLoggedIn: true}
           } else {
             handleAppError(dispatch, res.data)
             return rejectWithValue(null)

@@ -1,5 +1,5 @@
 import { instance } from "@/common/instance"
-import { BaseDefaultResponse, BaseTodolistOperationResponse } from "@/common/types"
+import { BaseDefaultResponse, BaseTodolistResponse } from "@/common/types"
 import { Todolist } from "./todolistsApi.types"
 
 export const todolistsApi = {
@@ -11,7 +11,7 @@ export const todolistsApi = {
     return instance.put<BaseDefaultResponse>(`/todo-lists/${id}`, { title })
   },
   createTodolist(title: string) {
-    return instance.post<BaseTodolistOperationResponse>("/todo-lists", { title })
+    return instance.post<BaseTodolistResponse>("/todo-lists", { title })
   },
   deleteTodolist(id: string) {
     return instance.delete<BaseDefaultResponse>(`/todo-lists/${id}`)

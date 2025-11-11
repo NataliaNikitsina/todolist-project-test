@@ -1,14 +1,14 @@
 import {
   baseDefaultResponseSchema,
-  baseTasksOperationResponseSchema,
-  baseTodolistOperationResponseSchema, fieldErrorSchema
+  baseTaskResponseSchema,
+  baseTodolistResponseSchema, fieldErrorSchema
 } from "@/common/types/schema.ts"
 import { z } from "zod"
 
 export type FieldError = z.infer<typeof fieldErrorSchema>
-export type BaseTasksOperationResponse = z.infer<typeof baseTasksOperationResponseSchema>
+export type BaseTaskResponse = z.infer<typeof baseTaskResponseSchema>
 export type BaseDefaultResponse = z.infer<typeof baseDefaultResponseSchema>
-export type BaseTodolistOperationResponse = z.infer<typeof baseTodolistOperationResponseSchema>
+export type BaseTodolistResponse = z.infer<typeof baseTodolistResponseSchema>
 
 
 export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed'

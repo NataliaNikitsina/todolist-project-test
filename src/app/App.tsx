@@ -18,10 +18,9 @@ export const App = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(meTC())
-      .finally(() => {
-        setIsInitialized(true)
-      })
+    dispatch(meTC()).finally(() => {
+      setIsInitialized(true)
+    })
   }, [])
 
   const theme = getTheme(themeMode)

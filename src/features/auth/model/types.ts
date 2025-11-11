@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { baseAuthOperationResponseSchema, baseMeOperationResponseSchema } from "@/features/auth/model/schema.ts"
+import { baseLoginResponseSchema, baseMeResponseSchema } from "@/features/auth/model/schema.ts"
 
-export type BaseAuthOperationResponse = z.infer<typeof baseAuthOperationResponseSchema>
-export type BaseMeOperationResponse = z.infer<typeof baseMeOperationResponseSchema>
+export type BaseLoginResponse = z.infer<typeof baseLoginResponseSchema>
+export type BaseMeResponse = z.infer<typeof baseMeResponseSchema>

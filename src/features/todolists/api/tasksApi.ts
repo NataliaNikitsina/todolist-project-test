@@ -1,5 +1,5 @@
 import { instance } from "@/common/instance"
-import { BaseDefaultResponse, BaseTasksOperationResponse } from "@/common/types"
+import { BaseDefaultResponse, BaseTaskResponse } from "@/common/types"
 import type { GetTasksResponse, UpdateTaskModel } from "./tasksApi.types"
 
 export const tasksApi = {
@@ -8,11 +8,11 @@ export const tasksApi = {
   },
   createTask(payload: { todolistId: string; title: string }) {
     const { todolistId, title } = payload
-    return instance.post<BaseTasksOperationResponse>(`/todo-lists/${todolistId}/tasks`, { title })
+    return instance.post<BaseTaskResponse>(`/todo-lists/${todolistId}/tasks`, { title })
   },
   updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) {
     const { todolistId, taskId, model } = payload
-    return instance.put<BaseTasksOperationResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
+    return instance.put<BaseTaskResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
   },
   deleteTask(payload: { todolistId: string; taskId: string }) {
     const { todolistId, taskId } = payload

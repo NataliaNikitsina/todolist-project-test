@@ -15,13 +15,13 @@ export const baseResponseSchema = <T extends z.ZodTypeAny>(schema: T) =>
     fieldsErrors: fieldErrorSchema.array(),
   })
 
-export const baseTasksOperationResponseSchema = baseResponseSchema(
+export const baseTaskResponseSchema = baseResponseSchema(
   z.object({
     item: domainTaskSchema,
   }),
 )
 
-export const baseTodolistOperationResponseSchema = baseResponseSchema(
+export const baseTodolistResponseSchema = baseResponseSchema(
   z.object({
     item: todolistSchema,
   }),
