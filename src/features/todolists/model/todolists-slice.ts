@@ -1,5 +1,5 @@
 import { Todolist } from "@/features/todolists/api/todolistsApi.types.ts"
-import { todolistsApi } from "@/features/todolists/api/todolistsApi.ts"
+import { _todolistsApi } from "@/features/todolists/api/_todolistsApi.ts"
 import { createAppSlice } from "@/common/utils"
 import { setAppStatusAC } from "@/app/app-slice.ts"
 import { RequestStatus } from "@/common/types"
@@ -38,7 +38,7 @@ export const todolistsSlice = createAppSlice({
           const { dispatch, rejectWithValue } = thunkApi
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            const res = await todolistsApi.getTodolists()
+            const res = await _todolistsApi.getTodolists()
             todolistSchema.array().parse(res.data)
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return { todolists: res.data }
@@ -59,7 +59,7 @@ export const todolistsSlice = createAppSlice({
           const { dispatch, rejectWithValue } = thunkApi
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            const res = await todolistsApi.createTodolist(args.title)
+            const res = await _todolistsApi.createTodolist(args.title)
             baseTodolistResponseSchema.parse(res.data)
             if (res.data.resultCode === ResultCode.Success) {
               dispatch(setAppStatusAC({ status: "succeeded" }))
@@ -86,7 +86,7 @@ export const todolistsSlice = createAppSlice({
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
             dispatch(changeTodolistEntityStatusAC({ id: args.todolistId, entityStatus: "loading" }))
-            const res = await todolistsApi.deleteTodolist(args.todolistId)
+            const res = await _todolistsApi.deleteTodolist(args.todolistId)
             baseDefaultResponseSchema.parse(res.data)
             if (res.data.resultCode === ResultCode.Success) {
               dispatch(setAppStatusAC({ status: "succeeded" }))
@@ -116,7 +116,7 @@ export const todolistsSlice = createAppSlice({
           const { dispatch, rejectWithValue } = thunkApi
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            const res = await todolistsApi.changeTodolistTitle(args)
+            const res = await _todolistsApi.changeTodolistTitle(args)
             baseDefaultResponseSchema.parse(res.data)
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return args
