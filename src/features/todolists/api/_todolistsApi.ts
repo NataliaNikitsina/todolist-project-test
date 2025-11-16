@@ -1,35 +1,60 @@
 import { instance } from "@/common/instance"
 import { BaseDefaultResponse, BaseTodolistResponse } from "@/common/types"
 import { Todolist } from "./todolistsApi.types"
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { AUTH_TOKEN } from "@/common/constants/constants.ts"
+import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
+import { baseApi } from "@/app/baseApi.ts"
 
-export const todolistsApi = createApi({
-  reducerPath: "todolistsApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_BASE_URL,
-    headers: {
-      "API-KEY": import.meta.env.VITE_API_KEY,
-    },
-    prepareHeaders: (headers) => {
-      headers.set("Authorization", `Bearer ${localStorage.getItem(AUTH_TOKEN)}`)
-    },
+export const todolistsApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getTodolists: builder.query<DomainTodolist[], void>({
+      query: () => "/todo-lists",
+      transformResponse: (todolists: Todolist[]) => {
+        return todolists.map((tl) => ({ ...tl, filter: "all", entityStatus: "idle" }))
+      },
+      providesTags: ["Todolist"],
+    }),
+
+    createTodolist: builder.mutation<BaseTodolistResponse, string>({
+      query: (title) => {
+        return {
+          method: "post",
+          url: "/todo-lists",
+          body: { title },
+        }
+      },
+      invalidatesTags: ["Todolist"],
+    }),
+
+    deleteTodolist: builder.mutation<BaseDefaultResponse, string>({
+      query: (id: string) => {
+        return {
+          method: "delete",
+          url: `/todo-lists/${id}`,
+        }
+      },
+      invalidatesTags: ["Todolist"],
+    }),
+
+    changeTodolistTitle: builder.mutation<BaseDefaultResponse, { id: string; title: string }>({
+      query: ({ id, title }) => {
+        return {
+          method: "put",
+          url: `/todo-lists/${id}`,
+          body: { title },
+        }
+      },
+      invalidatesTags: ["Todolist"],
+    }),
   }),
-  endpoints: (builder) => {
-    return {
-      getTodolists: builder.query<Todolist[], void>({
-        query: () => {
-          return {
-            method: "get",
-            url: "/todo-lists",
-          }
-        },
-      }),
-    }
-  },
 })
 
-export const { useGetTodolistsQuery } = todolistsApi
+export const {
+  useGetTodolistsQuery,
+  useLazyGetTodolistsQuery,
+  useCreateTodolistMutation,
+  useDeleteTodolistMutation,
+  useChangeTodolistTitleMutation,
+} = todolistsApi
 
 export const _todolistsApi = {
   getTodolists() {

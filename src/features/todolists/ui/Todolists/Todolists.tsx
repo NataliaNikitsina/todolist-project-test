@@ -6,6 +6,7 @@ import { useGetTodolistsQuery } from "@/features/todolists/api/_todolistsApi.ts"
 export const Todolists = () => {
 
   const {data} = useGetTodolistsQuery()
+  //const [trigger, {data}] = useLazyGetTodolistsQuery() для запроса по действию (пр-р -клик)
 
   return (
     <>
