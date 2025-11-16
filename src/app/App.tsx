@@ -7,25 +7,28 @@ import { ThemeProvider } from "@mui/material/styles"
 import { selectThemeMode } from "@/app/app-slice.ts"
 import { ErrorSnackbar } from "@/common/components/ErrorSnackbar.tsx"
 import { Routing } from "@/common/components/Routing/Routing.tsx"
-import { useEffect, useState } from "react"
-import { meTC } from "@/features/auth/api/auth-slice.ts"
+import { useEffect } from "react"
 import { CircularProgress } from "@mui/material"
 import styles from "./App.module.css"
+import { useMeQuery } from "@/features/auth/api/_authApi.ts"
+import { ResultCode } from "@/common/enums"
+import { setIsLoggedIn } from "@/features/auth/api/auth-slice.ts"
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
-  const [isInitialized, setIsInitialized] = useState(false)
   const dispatch = useAppDispatch()
+  const { data, isLoading } = useMeQuery()
 
   useEffect(() => {
-    dispatch(meTC()).finally(() => {
-      setIsInitialized(true)
-    })
-  }, [])
+    if (isLoading) return
+    if (data?.resultCode === ResultCode.Success) {
+      dispatch(setIsLoggedIn({ isLoggedIn: true }))
+    }
+  }, [isLoading])
 
   const theme = getTheme(themeMode)
 
-  if (!isInitialized) {
+  if (isLoading) {
     return (
       <div className={styles.circularProgressContainer}>
         <CircularProgress size={150} thickness={3} />
