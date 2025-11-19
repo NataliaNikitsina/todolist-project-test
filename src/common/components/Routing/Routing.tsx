@@ -4,8 +4,8 @@ import { Login } from "@/features/auth/ui/Login/Login.tsx"
 import { PageNotFound } from "@/common/components/PageNotFound/PageNotFound.tsx"
 import { Faq } from "@/common/components/Faq/Faq.tsx"
 import { PrivateRoutes } from "@/common/components/PrivateRoutes/PrivateRoutes.tsx"
-import { selectIsLoggedIn } from "@/features/auth/api/auth-slice.ts"
 import { useAppSelector } from "@/common/hooks"
+import { selectIsLoggedIn } from "@/app/app-slice.ts"
 
 export const Path = {
   Main: "/",

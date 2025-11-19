@@ -1,4 +1,4 @@
-import { selectThemeMode, setIsLoggedIn } from "@/app/app-slice"
+import { selectThemeMode, setAppLoginAC, setIsLoggedIn } from "@/app/app-slice"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
 import Button from "@mui/material/Button"
@@ -45,6 +45,7 @@ export const Login = () => {
         if (res.resultCode === ResultCode.Success) {
           localStorage.setItem(AUTH_TOKEN, res.data.token)
           dispatch(setIsLoggedIn({ isLoggedIn: true }))
+            dispatch(setAppLoginAC({ login: data.email }))
           reset()
         }
       })}

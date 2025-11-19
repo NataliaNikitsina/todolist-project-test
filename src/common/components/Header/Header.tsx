@@ -4,7 +4,8 @@ import {
   selectIsLoggedIn,
   selectStatus,
   selectThemeMode,
-  setAppLoginAC, setIsLoggedIn
+  setAppLoginAC,
+  setIsLoggedIn,
 } from "@/app/app-slice.ts"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { containerSx } from "@/common/styles"
@@ -21,7 +22,7 @@ import { Path } from "@/common/components/Routing/Routing.tsx"
 import { useLogoutMutation } from "@/features/auth/api/_authApi.ts"
 import { ResultCode } from "@/common/enums"
 import { AUTH_TOKEN } from "@/common/constants/constants.ts"
-import { clearDataAC } from "@/common/actions"
+import { baseApi } from "@/app/baseApi.ts"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -44,10 +45,15 @@ export const Header = () => {
         if (res.resultCode === ResultCode.Success) {
           localStorage.removeItem(AUTH_TOKEN)
           dispatch(setAppLoginAC({ login: null }))
-          dispatch(clearDataAC())
+          // dispatch(clearDataAC())
           dispatch(setIsLoggedIn({ isLoggedIn: false }))
+          // dispatch(baseApi.util.resetApiState())
         }
       })
+      .then(() =>
+        // dispatch(baseApi.util.resetApiState())
+        dispatch(baseApi.util.invalidateTags(["Task", "Todolist"])),
+      )
   }
 
   return (

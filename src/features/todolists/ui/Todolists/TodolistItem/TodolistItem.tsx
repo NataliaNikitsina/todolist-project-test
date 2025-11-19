@@ -1,20 +1,18 @@
-import { useAppDispatch } from "@/common/hooks"
 import { FilterButtons } from "./FilterButtons/FilterButtons"
 import { Tasks } from "./Tasks/Tasks"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 import { CreateItemForm } from "@/common/components/CreateItemForm/CreateItemForm"
 import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
-import { createTaskTS } from "@/features/todolists/model/tasks-slice.ts"
+import { useCreateTaskMutation } from "@/features/todolists/api/_tasksApi.ts"
 
 type Props = {
   todolist: DomainTodolist
 }
 
 export const TodolistItem = ({ todolist }: Props) => {
-  const dispatch = useAppDispatch()
-
+  const [createTaskTrigger] = useCreateTaskMutation()
   const createTask = (title: string) => {
-    dispatch((createTaskTS({todolistId: todolist.id, title })))
+    createTaskTrigger({todolistId: todolist.id, title })
   }
 
   return (

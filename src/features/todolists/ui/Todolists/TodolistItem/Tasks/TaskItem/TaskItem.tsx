@@ -1,6 +1,4 @@
 import { EditableSpan } from "@/common/components/EditableSpan/EditableSpan"
-import { useAppDispatch } from "@/common/hooks"
-import { deleteTaskTC, updateTaskTC } from "@/features/todolists/model/tasks-slice.ts"
 import DeleteIcon from "@mui/icons-material/Delete"
 import Checkbox from "@mui/material/Checkbox"
 import IconButton from "@mui/material/IconButton"
@@ -8,7 +6,8 @@ import ListItem from "@mui/material/ListItem"
 import type { ChangeEvent } from "react"
 import { getListItemSx } from "./TaskItem.styles"
 import { TaskStatus } from "@/common/enums"
-import { DomainTask } from "@/features/todolists/api/tasksApi.types.ts"
+import { DomainTask, UpdateTaskModel } from "@/features/todolists/api/tasksApi.types.ts"
+import { useDeleteTaskMutation, useUpdateTaskMutation } from "@/features/todolists/api/_tasksApi.ts"
 
 type Props = {
   task: DomainTask
@@ -16,26 +15,35 @@ type Props = {
   isDisabled: boolean
 }
 
+
+export const createModel = (task: DomainTask, obj: Partial<UpdateTaskModel>): UpdateTaskModel => {
+  return {
+    status: task.status,
+    title: task.title,
+    deadline: task.deadline,
+    description: task.description,
+    priority: task.priority,
+    startDate: task.startDate,
+    ...obj
+  }}
+
 export const TaskItem = ({ task, todolistId, isDisabled }: Props) => {
-  const dispatch = useAppDispatch()
+  const [deleteTaskTrigger] = useDeleteTaskMutation()
+  const [updateTaskTrigger] = useUpdateTaskMutation()
 
   const deleteTask = () => {
-    dispatch(deleteTaskTC({ todolistId, taskId: task.id }))
+    deleteTaskTrigger({ todolistId, taskId: task.id })
   }
 
   const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
-    const newStatusValue = e.currentTarget.checked
-    dispatch(
-      updateTaskTC({
-        todolistId,
-        taskId: task.id,
-        domainModel: { status: newStatusValue ? TaskStatus.Completed : TaskStatus.New },
-      }),
-    )
+    let status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
+    const model = createModel(task, { status })
+    updateTaskTrigger({ taskId: task.id, todolistId, model })
   }
 
   const changeTaskTitle = (title: string) => {
-    dispatch(updateTaskTC({ todolistId, taskId: task.id, domainModel: { title } }))
+    const model = createModel(task, { title })
+    updateTaskTrigger({ taskId: task.id, todolistId, model })
   }
 
   return (
@@ -44,7 +52,7 @@ export const TaskItem = ({ task, todolistId, isDisabled }: Props) => {
         <Checkbox checked={task.status === TaskStatus.Completed} onChange={changeTaskStatus} disabled={isDisabled} />
         <EditableSpan value={task.title} onChange={changeTaskTitle} isDisabled={isDisabled} />
       </div>
-      <IconButton onClick={deleteTask} disabled={isDisabled} >
+      <IconButton onClick={deleteTask} disabled={isDisabled}>
         <DeleteIcon />
       </IconButton>
     </ListItem>

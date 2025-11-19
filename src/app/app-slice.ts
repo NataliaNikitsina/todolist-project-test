@@ -1,40 +1,52 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit"
 import { RequestStatus } from "@/common/types"
 
 export const appSlice = createSlice({
-  name: 'app',
+  name: "app",
   initialState: {
     themeMode: "dark" as ThemeMode,
-    status: 'idle' as RequestStatus,
+    status: "idle" as RequestStatus,
     error: null as string | null,
     login: null as string | null,
-    isLoggedIn: false,
+    isLoggedIn: false
   },
   selectors: {
     selectThemeMode: state => state.themeMode,
     selectStatus: state => state.status,
     selectAppError: state => state.error,
     selectAppLogin: state => state.login,
-    selectIsLoggedIn: state => state.isLoggedIn,
+    selectIsLoggedIn: state => state.isLoggedIn
   },
-  reducers: (create)=>{
+  reducers: (create) => {
     return {
-      setIsLoggedIn: create.reducer<{isLoggedIn: boolean}>((state, action)=>{
+      setIsLoggedIn: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
         state.isLoggedIn = action.payload.isLoggedIn
       }),
-      changeThemeModeAC : create.reducer<{ themeMode: ThemeMode }>((state, action)=>{
+      changeThemeModeAC: create.reducer<{ themeMode: ThemeMode }>((state, action) => {
         state.themeMode = action.payload.themeMode
       }),
-      setAppStatusAC: create.reducer<{ status: RequestStatus }>((state, action)=>{
+      setAppStatusAC: create.reducer<{ status: RequestStatus }>((state, action) => {
         state.status = action.payload.status
       }),
-      setAppErrorAC: create.reducer<{ error: string | null }>((state, action)=>{
+      setAppErrorAC: create.reducer<{ error: string | null }>((state, action) => {
         state.error = action.payload.error
       }),
       setAppLoginAC: create.reducer<{ login: string | null }>((state, action) => {
         state.login = action.payload.login
-      }) ,
+      })
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(isPending, (state) => {
+        state.status = "loading"
+      })
+      .addMatcher(isFulfilled, (state) => {
+        state.status = "succeeded"
+      })
+      .addMatcher(isRejected, (state) => {
+        state.status = "failed"
+      })
   }
 })
 

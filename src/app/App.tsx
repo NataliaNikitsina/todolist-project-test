@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
 import CssBaseline from "@mui/material/CssBaseline"
 import { ThemeProvider } from "@mui/material/styles"
-import { selectThemeMode, setIsLoggedIn } from "@/app/app-slice.ts"
+import { selectThemeMode, setAppLoginAC, setIsLoggedIn } from "@/app/app-slice.ts"
 import { ErrorSnackbar } from "@/common/components/ErrorSnackbar.tsx"
 import { Routing } from "@/common/components/Routing/Routing.tsx"
 import { useEffect, useState } from "react"
@@ -23,6 +23,7 @@ export const App = () => {
     if (isLoading) return
     if (data?.resultCode === ResultCode.Success) {
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
+      dispatch(setAppLoginAC({ login: data.data.email }))
     }
     setInit(true)
   }, [isLoading])
