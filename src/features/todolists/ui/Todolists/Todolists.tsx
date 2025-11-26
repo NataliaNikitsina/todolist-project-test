@@ -8,6 +8,11 @@ import { containerSx } from "@/common/styles"
 
 export const Todolists = () => {
   const { data, isLoading } = useGetTodolistsQuery()
+
+  // (undefined, {
+  //   pollingInterval: 3000,
+  //   skipPollingIfUnfocused: true,
+  // })
   //const [trigger, {data}] = useLazyGetTodolistsQuery() для запроса по действию (пр-р -клик)
 
   if (isLoading) {
