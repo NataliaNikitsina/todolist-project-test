@@ -7,7 +7,7 @@ import {
   todolistsApi,
   useChangeTodolistTitleMutation,
   useDeleteTodolistMutation
-} from "@/features/todolists/api/_todolistsApi.ts"
+} from "@/features/todolists/api/todolistsApi.ts"
 import { useAppDispatch } from "@/common/hooks"
 import { RequestStatus } from "@/common/types"
 

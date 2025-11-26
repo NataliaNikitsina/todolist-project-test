@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { ResultCode } from "@/common/enums"
-import { domainTaskSchema, todolistSchema } from "@/features/todolists/model/schema.ts"
+import { domainTaskSchema, todolistSchema } from "@/features/todolists/lib/types/schema.ts"
 
 export const fieldErrorSchema = z.object({
   error: z.string(),

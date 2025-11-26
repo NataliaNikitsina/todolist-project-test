@@ -3,7 +3,7 @@ import { Tasks } from "./Tasks/Tasks"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 import { CreateItemForm } from "@/common/components/CreateItemForm/CreateItemForm"
 import { DomainTodolist } from "@/features/todolists/model/todolists-slice.ts"
-import { useCreateTaskMutation } from "@/features/todolists/api/_tasksApi.ts"
+import { useCreateTaskMutation } from "@/features/todolists/api/tasksApi.ts"
 
 type Props = {
   todolist: DomainTodolist
