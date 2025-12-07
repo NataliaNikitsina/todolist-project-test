@@ -13,6 +13,7 @@ type Props = {
   task: DomainTask
   todolistId: string
   isDisabled: boolean
+  returnPrevPage?: () => void
 }
 
 
@@ -27,13 +28,14 @@ export const createModel = (task: DomainTask, obj: Partial<UpdateTaskModel>): Up
     ...obj
   }}
 
-export const TaskItem = ({ task, todolistId, isDisabled }: Props) => {
+export const TaskItem = ({ task, todolistId, isDisabled, returnPrevPage }: Props) => {
   const [deleteTaskTrigger] = useDeleteTaskMutation()
   const [updateTaskTrigger] = useUpdateTaskMutation()
 
   const deleteTask = () => {
     deleteTaskTrigger({ todolistId, taskId: task.id })
-  }
+      .unwrap()
+      .then(()=>{if(returnPrevPage)returnPrevPage()})}
 
   const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
     let status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
