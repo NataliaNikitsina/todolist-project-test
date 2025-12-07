@@ -1,4 +1,4 @@
-import { selectThemeMode, setAppErrorAC, setAppLoginAC, setIsLoggedIn } from "@/app/app-slice"
+import { selectThemeMode, setAppLoginAC, setIsLoggedIn } from "@/app/app-slice"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
 import Button from "@mui/material/Button"
@@ -27,7 +27,7 @@ export const Login = () => {
   const dispatch = useAppDispatch()
 
   const [loginTrigger] = useLoginMutation()
-  const {data: captcha} = useGetCaptchaQuery(undefined, {skip: !isCaptcha})
+  const { data: captcha } = useGetCaptchaQuery(undefined, { skip: !isCaptcha })
 
   const {
     register,
@@ -45,6 +45,7 @@ export const Login = () => {
   })
 
   const onSubmit: SubmitHandler<LoginInputs> = (data) => {
+    if(isCaptcha) {setIsCaptcha(false)}
     loginTrigger(data)
       .unwrap()
       .then((res) => {
@@ -56,9 +57,6 @@ export const Login = () => {
         }
         if (res.resultCode === ResultCode.CaptchaError) {
           setIsCaptcha(true)
-        }
-        if (res.resultCode === ResultCode.Error) {
-          dispatch(setAppErrorAC({error: res.messages[0] }))
         }
       })
   }
@@ -112,8 +110,8 @@ export const Login = () => {
                 />
               }
             />
-            {captcha && <img src={captcha.url} alt={'captcha'}/>}
-            {captcha &&  <TextField label="Captcha" margin="normal" error={!!errors.captcha} {...register("captcha")} />}
+            {captcha && <img src={captcha.url} alt={"captcha"} />}
+            {captcha && <TextField label="Captcha" margin="normal" error={!!errors.captcha} {...register("captcha")} />}
             <Button type="submit" variant="contained" color="primary">
               Login
             </Button>

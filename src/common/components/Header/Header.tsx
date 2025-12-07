@@ -52,7 +52,7 @@ export const Header = () => {
       })
       .then(() =>
         // dispatch(baseApi.util.resetApiState())
-        dispatch(baseApi.util.invalidateTags(["Task", "Todolist"])),
+        dispatch(baseApi.util.invalidateTags(["Task", "Todolist"]))
       )
   }
 

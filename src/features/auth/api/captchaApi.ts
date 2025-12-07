@@ -1,19 +1,7 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { AUTH_TOKEN } from "@/common/constants/constants.ts"
 import { CaptchaResponse } from "@/features/auth/model/types.ts"
+import { baseApi } from "@/app/baseApi.ts"
 
-export const captchaApi = createApi({
-  reducerPath: "captchaApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "https://social-network.samuraijs.com/api/1.0",
-    headers: {
-      "API-KEY": import.meta.env.VITE_API_KEY,
-    },
-    prepareHeaders: (headers) => {
-      headers.set("Authorization", `Bearer ${localStorage.getItem(AUTH_TOKEN)}`)
-    },
-    credentials: "include",
-  }),
+export const captchaApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getCaptcha: builder.query<CaptchaResponse, void>({
       query: () => "/security/get-captcha-url",
@@ -21,4 +9,4 @@ export const captchaApi = createApi({
   }),
 })
 
-export const {useGetCaptchaQuery} = captchaApi
+export const { useGetCaptchaQuery } = captchaApi

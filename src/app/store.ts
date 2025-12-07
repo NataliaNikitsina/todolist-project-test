@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
 // создание store
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware).concat(captchaApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware, captchaApi.middleware)
 })
 
 // автоматическое определение типа всего объекта состояния
