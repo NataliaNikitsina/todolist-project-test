@@ -10,7 +10,7 @@ import { Routing } from "@/common/components/Routing/Routing.tsx"
 import { useEffect, useState } from "react"
 import { CircularProgress } from "@mui/material"
 import styles from "./App.module.css"
-import { useMeQuery } from "@/features/auth/api/_authApi.ts"
+import { useMeQuery } from "@/features/auth/api/authApi.ts"
 import { ResultCode } from "@/common/enums"
 
 export const App = () => {

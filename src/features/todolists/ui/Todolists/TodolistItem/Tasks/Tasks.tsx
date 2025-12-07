@@ -13,7 +13,7 @@ type Props = {
 }
 
 export const Tasks = ({ todolist }: Props) => {
-  const { id, filter, entityStatus } = todolist
+  const { id, filter } = todolist
   const [page, setPage] = useState(1)
   const { data, isLoading } = useGetTasksQuery({ todolistId: id, params: { page } })
 
@@ -37,11 +37,11 @@ export const Tasks = ({ todolist }: Props) => {
         <>
           <List>
             {filteredTasks?.map((task) => (
-              <TaskItem key={task.id}
-                        task={task}
-                        todolistId={id}
-                        isDisabled={entityStatus === "loading"}
-                        returnPrevPage={data?.items.length === 1 ? ()=>setPage(page - 1) : undefined}
+              <TaskItem
+                key={task.id}
+                task={task}
+                todolistId={id}
+                returnPrevPage={data?.items.length === 1 && page !== 1 ? () => setPage(page - 1) : undefined}
               />
             ))}
           </List>

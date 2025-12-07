@@ -12,7 +12,6 @@ import { useDeleteTaskMutation, useUpdateTaskMutation } from "@/features/todolis
 type Props = {
   task: DomainTask
   todolistId: string
-  isDisabled: boolean
   returnPrevPage?: () => void
 }
 
@@ -28,7 +27,7 @@ export const createModel = (task: DomainTask, obj: Partial<UpdateTaskModel>): Up
     ...obj
   }}
 
-export const TaskItem = ({ task, todolistId, isDisabled, returnPrevPage }: Props) => {
+export const TaskItem = ({ task, todolistId, returnPrevPage }: Props) => {
   const [deleteTaskTrigger] = useDeleteTaskMutation()
   const [updateTaskTrigger] = useUpdateTaskMutation()
 
@@ -51,10 +50,10 @@ export const TaskItem = ({ task, todolistId, isDisabled, returnPrevPage }: Props
   return (
     <ListItem sx={getListItemSx(task.status === TaskStatus.Completed)}>
       <div>
-        <Checkbox checked={task.status === TaskStatus.Completed} onChange={changeTaskStatus} disabled={isDisabled} />
-        <EditableSpan value={task.title} onChange={changeTaskTitle} isDisabled={isDisabled} />
+        <Checkbox checked={task.status === TaskStatus.Completed} onChange={changeTaskStatus} />
+        <EditableSpan value={task.title} onChange={changeTaskTitle} />
       </div>
-      <IconButton onClick={deleteTask} disabled={isDisabled}>
+      <IconButton onClick={deleteTask} >
         <DeleteIcon />
       </IconButton>
     </ListItem>

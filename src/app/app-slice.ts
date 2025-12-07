@@ -62,16 +62,5 @@ export const appReducer = appSlice.reducer
 export const { changeThemeModeAC, setAppStatusAC, setAppErrorAC, setAppLoginAC, setIsLoggedIn } = appSlice.actions
 export const { selectThemeMode, selectStatus, selectAppError, selectAppLogin, selectIsLoggedIn } = appSlice.selectors
 
-// export const changeThemeModeAC = createAction<{ themeMode: ThemeMode }>("app/changeThemeMode")
-//
-// const initialState = {
-//   themeMode: "light" as ThemeMode,
-// }
-//
-// export const appReducer = createReducer(initialState, (builder) => {
-//   builder.addCase(changeThemeModeAC, (state, action) => {
-//     state.themeMode = action.payload.themeMode
-//   })
-// })
 
 export type ThemeMode = "dark" | "light"
