@@ -11,12 +11,11 @@ import Grid from "@mui/material/Grid2"
 import TextField from "@mui/material/TextField"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useLoginMutation } from "@/features/auth/api/authApi.ts"
+import { useGetCaptchaQuery, useLoginMutation } from "@/features/auth/api/authApi.ts"
 import { ResultCode } from "@/common/enums"
 import { AUTH_TOKEN } from "@/common/constants/constants.ts"
 import { LoginInputs } from "@/features/auth/model/types.ts"
 import { loginSchema } from "@/features/auth/model/schema.ts"
-import { useGetCaptchaQuery } from "@/features/auth/api/captchaApi.ts"
 import { useState } from "react"
 
 export const Login = () => {

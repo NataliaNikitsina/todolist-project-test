@@ -1,5 +1,5 @@
 export const Faq = () => {
   return (
-    <p>ffffffffffffaaaaaaaaaqqqqqq</p>
+    <p>Some information</p>
   )
 }
