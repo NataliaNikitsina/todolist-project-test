@@ -2,11 +2,12 @@ import { TaskItem } from "./TaskItem/TaskItem"
 import List from "@mui/material/List"
 import { TaskStatus } from "@/common/enums"
 import { useGetTasksQuery } from "@/features/todolists/api/tasksApi.ts"
-import { TasksSkeleton } from "../../../../../../../features/todolists/ui/Todolists/TodolistItem/Tasks/TasksSkeleton/TasksSkeleton.tsx"
+
 import { DomainTodolist } from "@/features/todolists/lib/types"
 import { TasksPagination } from "@/features/todolists/ui/Todolists/TodolistItem/TasksPagination/TasksPagination.tsx"
 import { useState } from "react"
 import { PAGE_SIZE } from "@/common/constants/constants.ts"
+import { TasksSkeleton } from "@/features/todolists/ui/Todolists/TodolistItem/Tasks/TasksSkeleton/TasksSkeleton.tsx"
 
 type Props = {
   todolist: DomainTodolist

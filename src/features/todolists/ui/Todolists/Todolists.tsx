@@ -2,7 +2,7 @@ import { TodolistItem } from "./TodolistItem/TodolistItem"
 import Grid from "@mui/material/Grid2"
 import Paper from "@mui/material/Paper"
 import { useGetTodolistsQuery } from "@/features/todolists/api/todolistsApi.ts"
-import { TodolistSkeleton } from "../../../../../features/todolists/ui/Todolists/TodolistSkeleton/TodolistSkeleton.tsx"
+import { TodolistSkeleton } from "@/features/todolists/ui/Todolists/TodolistSkeleton/TodolistSkeleton.tsx"
 import Box from "@mui/material/Box"
 import { containerSx } from "@/common/styles"
 
@@ -39,10 +39,3 @@ export const Todolists = () => {
     </>
   )
 }
-
-// const todolists = useAppSelector(selectTodolists)
-// const dispatch = useAppDispatch()
-
-// useEffect(() => {
-//   dispatch(fetchTodolistsTS())
-// }, [])
